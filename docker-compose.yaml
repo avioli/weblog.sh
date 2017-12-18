@@ -1,0 +1,46 @@
+version: "2"
+services:
+  weblog:
+    image: node:8.9-alpine
+    user: node
+    working_dir: /home/node/app
+    environment:
+      MONGO_URL: "mongodb://mongo/weblogsh" # the mongo url - includes the service name below
+      REDIS_HOST: redis         # redis host - the service name below
+      # REDIS_PORT: 6379          # cannot be changed with the stock image below
+      # CACHING: OFF              # turns redis caching ON/OFF - it is always OFF when NODE_ENV=development
+
+      HOSTNAME: "localhost"     # used by production middleware to pass requests
+      # PORT: 3000                # used by express server
+
+      # HOST: "localhost:3000"    # used for generated url and feed
+      # PROTOCOL: http            # used for the generated url and feed
+
+      NODE_ENV: development     # looks for ssh key in `./tmp/host.key`
+      # NODE_ENV: production      # looks for ssh key in `/var/host.key`
+    volumes:
+      - ./:/home/node/app
+      # - ./tmp/host.key:/var/host.key
+    expose:
+      - 3000
+      - 2222
+    ports:
+      - 3000:3000
+      - 2222:2222
+    command: "npm start"
+    links: 
+      - mongo
+      - redis
+    # restart: always           # if you want to restart the service when docker restarts
+
+  mongo:
+    image: mvertes/alpine-mongo:3.4.10-0
+    # ports:
+    #  - 27017:27017            # expose mongo port to access from `docker-compose exec mongo mongo`
+    # restart: always
+
+  redis:
+    image: redis:3.2-alpine
+    # ports:
+    #   - 6379:6379             # expose redis port to access from `docker-compose exec redis redis-cli`
+    # restart: always

@@ -35,6 +35,30 @@ The service runs on a custom SSH server, supporting the SCP protocol to let netr
 
 Other than that, it's mostly a basic Express web app.
 
+## Local Dev Server Setup
+
+### Direct
+
+- You need [mongodb](https://www.mongodb.com/download-center#community) installed (on Mac OS with homebrew - `brew install mongodb && brew services start mongo`)
+- You need [redis](https://redis.io/download) installed (on Mac OS with homebrew - `brew install redis && brew services start redis`)
+- Clone repo & cd into it
+- `npm install`
+- `ssh-keygen -t ./tmp/host.key -N ''`
+- `env NODE_ENV=development node .`
+
+### Simple Docker-compose
+
+- Install docker
+- Clone repo & cd into it
+- `npm install`
+- `ssh-keygen -t ./tmp/host.key -N ''`
+- Edit `docker-compose.yaml` (if you want)
+- `docker-compose up` or `docker-compose up -d`
+- Teardown via `docker-compose down`
+
+Don't forget that the SSH server is litening on port 2222.
+Fronend is at [http://localhost:3000](http://localhost:3000)
+
 ## Contributing
 
 - Take up any of the issues reported in [Github Issues](https://github.com/hmngwy/weblog.sh/issues)
